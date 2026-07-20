@@ -1,0 +1,16 @@
+{
+  "name": "riyaaz",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "web:build": "npm run build --workspace=@riyaaz/web",
+    "web:lint": "npm run lint --workspace=@riyaaz/web",
+    "web:test": "npm run test --workspace=@riyaaz/web"
+  },
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  }
+}

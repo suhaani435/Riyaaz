@@ -78,6 +78,15 @@ web_modules/
 .next
 out
 
+# Python virtual environments and tooling
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+
 # Nuxt.js build / generate output
 .nuxt
 dist
