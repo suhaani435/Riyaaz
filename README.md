@@ -41,3 +41,9 @@ infra/                    Local and deployment infrastructure definitions
   storage, and realtime capabilities where appropriate.
 - Production observability, security, and migration safety are requirements,
   not later enhancements.
+
+## Local development
+
+The local container stack runs PostgreSQL, the API, and the web application.
+See the [local environment guide](docs/development/local-environment.md) for
+setup, verification, and the current health-check scope.

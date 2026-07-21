@@ -87,6 +87,9 @@ __pycache__/
 .ruff_cache/
 htmlcov/
 
+# Docker Compose local state
+.docker/
+
 # Nuxt.js build / generate output
 .nuxt
 dist

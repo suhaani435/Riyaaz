@@ -1,0 +1,14 @@
+.git/
+.next/
+node_modules/
+apps/*/.next/
+apps/*/node_modules/
+services/*/.venv/
+services/*/.pytest_cache/
+services/**/__pycache__/
+coverage/
+htmlcov/
+.env
+.env.*
+!.env.example
+npm-debug.log*
