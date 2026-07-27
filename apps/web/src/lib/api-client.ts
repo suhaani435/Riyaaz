@@ -46,6 +46,22 @@ export async function apiRequest<T>(
   }
 
   const headers = new Headers(extraHeaders);
+
+  if (typeof window !== "undefined" && !headers.has("Authorization")) {
+    try {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers.set("Authorization", `Bearer ${session.access_token}`);
+      }
+    } catch {
+      // Ignore if Supabase credentials are missing or in non-browser context
+    }
+  }
+
   if (body !== undefined && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
