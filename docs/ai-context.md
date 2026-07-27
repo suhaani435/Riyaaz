@@ -67,9 +67,21 @@ Any AI working on this codebase MUST abide by the following rules:
 - Frontend foundation: Next.js configured with shadcn/ui (stone + saffron Kathak-inspired theme), TanStack Query provider, `api-client.ts` fetch wrapper.
 - Testing: `pytest-asyncio` with SQLite in-memory fixtures. Vitest on frontend.
 
-### 🚀 What is Next (Phase 1: Authentication & Dashboard)
-- Integration of Supabase Auth on the backend and frontend.
-- Creating the core user layout, dashboard, and basic practice session history schema.
+### ✅ What is Done (Phase 1: Authentication & Dashboard)
+*Completed on the `phase-1/auth-and-dashboard` branch.*
+- PostgreSQL `users` table created with Alembic migration `0001_create_users_table`.
+- FastAPI Clean Architecture `identity` module (Domain entities, Use cases, SQLAlchemy repository, PyJWT Auth provider, dependencies, and `/api/v1/identity/*` endpoints).
+- Supabase Auth integration on frontend (`@supabase/supabase-js` & `@supabase/ssr`).
+- Form pages (`/login`, `/signup`) with Zod validation, role selection (Student vs Teacher), and auth callback route.
+- Next.js auth middleware (`src/middleware.ts`) protecting `/dashboard/*` routes.
+- Responsive Dashboard Layout shell with sidebar, topbar, user profile avatar, and role-based student/teacher home views.
+- Full test coverage (7 integration tests passing on backend, Vitest + Next build passing on web).
+
+### 🚀 What is Next (Phase 2: Rhythm Engine)
+- BPM metronome audio engine (Tone.js / Web Audio API).
+- Taal catalog (Teentaal 16 beats, Jhaptal 10 beats, Ektaal 12 beats, Rupak 7 beats).
+- Nagma audio loop playback & tempo synchronization.
+- Practice Session tracking data model & API endpoints.
 
 ### 🔮 What is Further (Phases 2 - 8)
 - **Phase 2:** Rhythm Engine (BPM, Taal, Nagma, Session Tracking).
