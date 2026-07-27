@@ -17,6 +17,9 @@ from riyaaz_api.logging import (
     configure_logging,
     get_logger,
 )
+from riyaaz_api.modules.identity.presentation.routes import (
+    router as identity_router,
+)
 from riyaaz_api.modules.system.presentation.routes import router as system_router
 
 
@@ -71,6 +74,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     # --- Presentation modules ---
     app.include_router(system_router, prefix="/api/v1")
+    app.include_router(identity_router, prefix="/api/v1")
 
     return app
 

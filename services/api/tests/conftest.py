@@ -36,6 +36,15 @@ async def client(test_settings: Settings) -> AsyncClient:
     app = create_app(settings=test_settings)
 
     db_manager.startup(test_settings.database_url)
+    if db_manager._engine is not None:
+        async with db_manager._engine.begin() as conn:
+            from riyaaz_api.database import Base
+            from riyaaz_api.modules.identity.infrastructure.models import (  # noqa: F401
+                UserModel,
+            )
+
+            await conn.run_sync(Base.metadata.create_all)
+
     try:
         async with AsyncClient(
             transport=ASGITransport(app=app),

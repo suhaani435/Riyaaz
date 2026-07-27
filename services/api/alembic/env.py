@@ -11,6 +11,7 @@ from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from riyaaz_api.database import Base
+from riyaaz_api.modules.identity.infrastructure.models import UserModel  # noqa: F401
 
 config = context.config
 

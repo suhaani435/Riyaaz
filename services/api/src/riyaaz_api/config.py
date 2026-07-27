@@ -40,7 +40,7 @@ class Settings(BaseSettings):
 
     # --- Database ---
     database_url: str = Field(
-        ...,
+        default="postgresql+asyncpg://riyaaz:replace_with_a_local_secret@localhost:5433/riyaaz",
         description="Async PostgreSQL connection string (postgresql+asyncpg://...).",
     )
 
@@ -55,6 +55,7 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return list(value)  # type: ignore[arg-type]
 
-    # --- Supabase (placeholder for Phase 1) ---
+    # --- Supabase ---
     supabase_url: str = ""
     supabase_anon_key: str = ""
+    supabase_jwt_secret: str = "super-secret-local-jwt-secret-for-testing"
