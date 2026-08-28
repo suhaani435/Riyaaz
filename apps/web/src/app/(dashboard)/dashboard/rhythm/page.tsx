@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Play,
   Pause,
@@ -11,6 +11,8 @@ import {
   Volume2,
   Music2,
   Mic,
+  Gauge,
+  Sparkles,
 } from "lucide-react";
 
 const INK = "#420A10";
@@ -32,22 +34,10 @@ const PRIMARY_TAALS: Taal[] = [
     id: "teentaal",
     name: "Teentaal",
     bols: [
-      "Dha",
-      "Dhin",
-      "Dhin",
-      "Dha",
-      "Dha",
-      "Dhin",
-      "Dhin",
-      "Dha",
-      "Dha",
-      "Tin",
-      "Tin",
-      "Ta",
-      "Ta",
-      "Dhin",
-      "Dhin",
-      "Dha",
+      "Dha", "Dhin", "Dhin", "Dha",
+      "Dha", "Dhin", "Dhin", "Dha",
+      "Dha", "Tin", "Tin", "Ta",
+      "Ta", "Dhin", "Dhin", "Dha",
     ],
     taali: [1, 5, 13],
     khaali: [9],
@@ -55,7 +45,10 @@ const PRIMARY_TAALS: Taal[] = [
   {
     id: "jhaptaal",
     name: "Jhaptaal",
-    bols: ["Dhi", "Na", "Dhi", "Dhi", "Na", "Ti", "Na", "Dhi", "Dhi", "Na"],
+    bols: [
+      "Dhi", "Na", "Dhi", "Dhi", "Na",
+      "Ti", "Na", "Dhi", "Dhi", "Na",
+    ],
     taali: [1, 3, 8],
     khaali: [6],
   },
@@ -63,18 +56,9 @@ const PRIMARY_TAALS: Taal[] = [
     id: "ektaal",
     name: "Ektaal",
     bols: [
-      "Dhin",
-      "Dhin",
-      "Dhage",
-      "Tirakita",
-      "Tu",
-      "Na",
-      "Kat",
-      "Ta",
-      "Dhage",
-      "Tirakita",
-      "Dhin",
-      "Na",
+      "Dhin", "Dhin", "Dhage", "Tirakita",
+      "Tu", "Na", "Kat", "Ta",
+      "Dhage", "Tirakita", "Dhin", "Na",
     ],
     taali: [1, 5, 9, 11],
     khaali: [3, 7],
@@ -83,20 +67,9 @@ const PRIMARY_TAALS: Taal[] = [
     id: "dhamaar",
     name: "Dhamaar",
     bols: [
-      "Ka",
-      "Dhi",
-      "Ta",
-      "Dhi",
-      "Ta",
-      "Dhaa",
-      "S",
-      "Ga",
-      "Ti",
-      "Ta",
-      "Ti",
-      "Ta",
-      "Taa",
-      "S",
+      "Ka", "Dhi", "Ta", "Dhi", "Ta",
+      "Dhaa", "S", "Ga", "Ti", "Ta",
+      "Ti", "Ta", "Taa", "S",
     ],
     taali: [1, 6, 11],
     khaali: [8],
@@ -129,21 +102,9 @@ const MORE_TAALS: Taal[] = [
     id: "pancham-sawari",
     name: "Pancham Sawari",
     bols: [
-      "Dha",
-      "Dhin",
-      "Na",
-      "Dha",
-      "Dha",
-      "Tin",
-      "Na",
-      "Dhin",
-      "Ga",
-      "Dhin",
-      "Na",
-      "Tin",
-      "Ga",
-      "Dhin",
-      "Na",
+      "Dha", "Dhin", "Na", "Dha", "Dha",
+      "Tin", "Na", "Dhin", "Ga", "Dhin",
+      "Na", "Tin", "Ga", "Dhin", "Na",
     ],
     taali: [1, 4, 12],
     khaali: [8],
@@ -152,18 +113,9 @@ const MORE_TAALS: Taal[] = [
     id: "chautaal",
     name: "Chautaal",
     bols: [
-      "Dha",
-      "Dha",
-      "Din",
-      "Ta",
-      "Kat",
-      "Tage",
-      "Din",
-      "Ta",
-      "Tete",
-      "Kata",
-      "Gadi",
-      "Gene",
+      "Dha", "Dha", "Din", "Ta", "Kat",
+      "Tage", "Din", "Ta", "Tete", "Kata",
+      "Gadi", "Gene",
     ],
     taali: [1, 5, 9, 11],
     khaali: [3, 7],
@@ -177,21 +129,51 @@ const LAYAS = [
     id: "vilambit",
     label: "Vilambit",
     bpm: 55,
-    desc: "Vilambit — slow tempo, for learning new compositions and fixing form.",
+    desc: "Slow laya — ideal for padhant, thaat poise & form correction.",
   },
   {
     id: "madhya",
     label: "Madhya",
     bpm: 100,
-    desc: "Madhya — medium tempo, steady everyday practice pace.",
+    desc: "Medium laya — steady everyday tatkar riyaaz & tukdas.",
   },
   {
     id: "drut",
     label: "Drut",
-    bpm: 170,
-    desc: "Drut — fast tempo, performance speed that tests control.",
+    bpm: 160,
+    desc: "Fast laya — tests speed, chakkars & tihai landing precision.",
+  },
+  {
+    id: "atidrut",
+    label: "Ati Drut",
+    bpm: 220,
+    desc: "High speed laya — masterclass footwork execution.",
   },
 ];
+
+const BOL_DEVANAGARI_MAP: Record<string, string> = {
+  dha: "धा",
+  dhin: "धिं",
+  dhi: "धिं",
+  tin: "तिं",
+  ti: "ती",
+  ta: "ता",
+  na: "ना",
+  ge: "गे",
+  ka: "क",
+  kat: "कत",
+  dhage: "धागे",
+  tirakita: "तिरकिट",
+  tu: "तू",
+  dhaa: "धाऽ",
+  taa: "ताऽ",
+  tete: "तेते",
+  kata: "कत",
+  gadi: "गदी",
+  gene: "गने",
+  tage: "तागे",
+  s: "–",
+};
 
 function getCategory(taal: Taal, i: number): "sam" | "taali" | "khaali" | "plain" {
   if (i === 1) return "sam";
@@ -201,67 +183,153 @@ function getCategory(taal: Taal, i: number): "sam" | "taali" | "khaali" | "plain
 }
 
 const CAT_LABEL: Record<string, string> = {
-  sam: "Sam",
-  taali: "Taali",
-  khaali: "Khaali",
+  sam: "Sam (सम)",
+  taali: "Taali (ताली)",
+  khaali: "Khaali (खाली)",
   plain: "",
 };
 
-function tone(
-  ctx: AudioContext,
-  freq: number,
-  dur: number,
-  type: OscillatorType,
-  peak: number,
-) {
+// Rich synthesized Tabla tone with Dagga bass and Dayyan resonance
+function playTablaTheka(ctx: AudioContext, category: string, bolText: string) {
+  const now = ctx.currentTime;
+  const isHeavyBol =
+    bolText.toLowerCase().includes("dha") ||
+    bolText.toLowerCase().includes("dhin") ||
+    bolText.toLowerCase().includes("ge") ||
+    category === "sam";
+
+  // 1. Dayyan (High pitch rim ring)
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.type = type;
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(peak, ctx.currentTime + 0.006);
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-  osc.connect(gain);
+  const filter = ctx.createBiquadFilter();
+
+  filter.type = "bandpass";
+  filter.frequency.value = category === "sam" ? 480 : category === "taali" ? 540 : 420;
+  filter.Q.value = 4.0;
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(category === "sam" ? 320 : 380, now);
+  osc.frequency.exponentialRampToValueAtTime(180, now + 0.15);
+
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.exponentialRampToValueAtTime(category === "sam" ? 0.6 : 0.35, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+  osc.connect(filter);
+  filter.connect(gain);
   gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + dur + 0.02);
+  osc.start(now);
+  osc.stop(now + 0.25);
+
+  // 2. Dagga (Deep bass modulation for heavy bols)
+  if (isHeavyBol) {
+    const bassOsc = ctx.createOscillator();
+    const bassGain = ctx.createGain();
+
+    bassOsc.type = "sine";
+    bassOsc.frequency.setValueAtTime(110, now);
+    bassOsc.frequency.exponentialRampToValueAtTime(65, now + 0.25);
+
+    bassGain.gain.setValueAtTime(0.001, now);
+    bassGain.gain.exponentialRampToValueAtTime(category === "sam" ? 0.7 : 0.45, now + 0.008);
+    bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    bassOsc.connect(bassGain);
+    bassGain.connect(ctx.destination);
+    bassOsc.start(now);
+    bassOsc.stop(now + 0.38);
+  }
+
+  // 3. Crisp clap / slap snap on sam & taali
+  if (category === "sam" || category === "taali") {
+    const size = Math.floor(ctx.sampleRate * 0.05);
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / size);
+
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 2200;
+    bp.Q.value = 1.5;
+
+    const snapGain = ctx.createGain();
+    snapGain.gain.setValueAtTime(category === "sam" ? 0.3 : 0.15, now);
+    snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    src.connect(bp);
+    bp.connect(snapGain);
+    snapGain.connect(ctx.destination);
+    src.start(now);
+  }
 }
 
-function clap(ctx: AudioContext, peak: number) {
-  const size = Math.floor(ctx.sampleRate * 0.08);
-  const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < size; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / size);
-  const src = ctx.createBufferSource();
-  src.buffer = buffer;
-  const bp = ctx.createBiquadFilter();
-  bp.type = "bandpass";
-  bp.frequency.value = 1500;
-  bp.Q.value = 0.9;
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(peak, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-  src.connect(bp);
-  bp.connect(gain);
-  gain.connect(ctx.destination);
-  src.start();
+// Melodic Nagma in Raga scale with dual-oscillator Harmonium / Sarangi resonance
+function playNagma(ctx: AudioContext, beatIndex: number, totalBeats: number) {
+  const now = ctx.currentTime;
+  // Classical Raga Bhairav / Yaman scale semitone steps
+  const scale = [0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2, 0, 7];
+  const step = scale[(beatIndex - 1) % scale.length];
+
+  // Base tonic root: C4 (261.63 Hz)
+  const rootFreq = 261.63;
+  const noteFreq = rootFreq * Math.pow(2, step / 12);
+
+  // Fundamental Lead Oscillator (Triangle wave for warm flute/sarangi tone)
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+  osc1.type = "triangle";
+  osc1.frequency.setValueAtTime(noteFreq, now);
+
+  // Overtone Oscillator (Sawtooth softened by lowpass for harmonium airiness)
+  const osc2 = ctx.createOscillator();
+  const filter2 = ctx.createBiquadFilter();
+  const gain2 = ctx.createGain();
+
+  osc2.type = "sawtooth";
+  osc2.frequency.setValueAtTime(noteFreq * 2, now);
+  filter2.type = "lowpass";
+  filter2.frequency.value = 800;
+
+  gain1.gain.setValueAtTime(0.001, now);
+  gain1.gain.linearRampToValueAtTime(0.2, now + 0.02);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+  gain2.gain.setValueAtTime(0.001, now);
+  gain2.gain.linearRampToValueAtTime(0.08, now + 0.02);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+
+  osc2.connect(filter2);
+  filter2.connect(gain2);
+  gain2.connect(ctx.destination);
+
+  osc1.start(now);
+  osc2.start(now);
+  osc1.stop(now + 0.45);
+  osc2.stop(now + 0.45);
 }
 
-function playNagma(ctx: AudioContext, beatIndex: number) {
-  const steps = [0, 2, 4, 7, 9, 7, 4, 2];
-  const semis = steps[(beatIndex - 1) % steps.length];
-  const freq = 220 * Math.pow(2, semis / 12);
-  tone(ctx, freq, 0.24, "triangle", 0.13);
-}
-
-function speakBol(text: string) {
+// Speak bol using SpeechSynthesis calibrated to speed
+function speakBol(text: string, bpm: number) {
   if (typeof window === "undefined" || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = 1.6;
-  u.pitch = 1;
-  u.volume = 0.9;
-  window.speechSynthesis.speak(u);
+  if (!text || text === "S" || text === "–") return;
+
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    // Rate adjusted dynamically to BPM (1.0 at 60 BPM -> 2.2 at 180 BPM)
+    u.rate = Math.min(2.5, Math.max(1.0, 0.8 + (bpm / 120)));
+    u.pitch = 1.0;
+    u.volume = 0.95;
+    u.lang = "hi-IN";
+    window.speechSynthesis.speak(u);
+  } catch {
+    // fallback if speech synthesis busy
+  }
 }
 
 function formatDuration(totalSeconds: number) {
@@ -290,16 +358,16 @@ function ToggleButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex-1 flex flex-col items-center gap-1 py-2.5 rounded-xl transition-all cursor-pointer"
+      className="flex-1 flex flex-col items-center gap-1 py-2.5 rounded-2xl transition-all cursor-pointer shadow-xs active:scale-95"
       style={{
-        background: active ? INK : "transparent",
-        border: "1.5px solid " + (active ? INK : "rgba(66,10,16,0.25)"),
+        background: active ? INK : "#FFFFFF",
+        border: "1.5px solid " + (active ? INK : "rgba(66,10,16,0.18)"),
       }}
     >
-      <Icon size={16} color={active ? CREAM : INK} />
+      <Icon size={17} color={active ? CREAM : INK} />
       <span
         style={{ color: active ? CREAM : INK, fontFamily: "Manrope, sans-serif" }}
-        className="text-xs font-semibold"
+        className="text-xs font-bold"
       >
         {label}
       </span>
@@ -322,53 +390,48 @@ function TaalSearchModal({
 }) {
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center p-4"
-      style={{ background: "rgba(55,10,11,0.55)", zIndex: 50 }}
+      className="fixed inset-0 flex items-center justify-center p-4 bg-[#370A0B]/60 backdrop-blur-xs z-50"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-2xl overflow-hidden flex flex-col shadow-2xl"
-        style={{ background: CREAM, maxHeight: "75vh" }}
+        className="w-full max-w-sm rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#F5F1E1] border border-[#C0912E]/30"
+        style={{ maxHeight: "75vh" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 pt-4 pb-2">
+        <div className="flex items-center justify-between px-5 pt-4 pb-2 border-b border-[#420A10]/10">
           <h2
             style={{ fontFamily: "Fraunces, serif", color: INK }}
             className="text-lg font-bold"
           >
-            Find a taal
+            Select Classical Taal
           </h2>
           <button
             type="button"
             onClick={onClose}
             style={{ color: INK }}
             aria-label="Close"
+            className="p-1 rounded-full hover:bg-black/5"
           >
             <X size={20} />
           </button>
         </div>
-        <div className="px-4 pb-3">
+        <div className="p-4 pb-2">
           <div
-            className="flex items-center gap-2 px-3 py-2 rounded-xl"
-            style={{ border: "1.5px solid rgba(66,10,16,0.25)", background: "#fff" }}
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white border border-[#420A10]/20 shadow-xs"
           >
-            <Search size={16} style={{ color: "rgba(66,10,16,0.5)" }} />
+            <Search size={16} className="text-[#420A10]/50" />
             <input
               autoFocus
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
-              placeholder="Search taals..."
-              className="flex-1 bg-transparent outline-none text-sm"
-              style={{ color: INK, fontFamily: "Manrope, sans-serif" }}
+              placeholder="Search by taal name (e.g. Teentaal, Rupak)..."
+              className="flex-1 bg-transparent outline-none text-sm text-[#420A10]"
             />
           </div>
         </div>
-        <div className="overflow-y-auto px-2 pb-4 space-y-1">
+        <div className="overflow-y-auto p-3 space-y-1.5">
           {results.length === 0 && (
-            <p
-              className="text-center text-sm px-4 py-6"
-              style={{ color: "rgba(66,10,16,0.5)" }}
-            >
+            <p className="text-center text-sm px-4 py-8 text-[#420A10]/60">
               No taal matches that search
             </p>
           )}
@@ -377,20 +440,18 @@ function TaalSearchModal({
               key={t.id}
               type="button"
               onClick={() => onSelect(t.id)}
-              className="w-full flex items-center justify-between px-3 py-3 rounded-xl text-left transition-colors hover:bg-black/5"
-              style={{ background: "rgba(66,10,16,0.04)" }}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-2xl text-left transition-all hover:bg-[#C0912E]/15 bg-white border border-[#420A10]/10 cursor-pointer shadow-xs"
             >
-              <span
-                style={{ color: INK, fontFamily: "Manrope, sans-serif" }}
-                className="font-semibold text-sm"
-              >
-                {t.name}
-              </span>
-              <span
-                style={{ color: GOLD, fontFamily: "Manrope, sans-serif" }}
-                className="text-xs font-semibold"
-              >
-                {t.bols.length} mātrā
+              <div>
+                <span className="font-bold text-sm text-[#420A10] block">
+                  {t.name}
+                </span>
+                <span className="text-[11px] text-[#6B5B52]">
+                  {t.bols.slice(0, 4).join(" ")}...
+                </span>
+              </div>
+              <span className="text-xs font-extrabold text-[#C0912E] bg-[#FFF8E1] px-2.5 py-1 rounded-full border border-[#C0912E]/30">
+                {t.bols.length} Mātrā
               </span>
             </button>
           ))}
@@ -418,7 +479,7 @@ function SessionLogView({
   error: string | null;
   sessions: SavedSession[];
   onBack: () => void;
-}) {
+  }) {
   const list = sessions || [];
   const totalSeconds = list.reduce((a, s) => a + (s.durationSeconds || 0), 0);
   return (
@@ -427,10 +488,9 @@ function SessionLogView({
         <button
           type="button"
           onClick={onBack}
-          className="text-sm font-semibold cursor-pointer"
-          style={{ color: INK, fontFamily: "Manrope, sans-serif" }}
+          className="text-sm font-bold text-[#420A10] hover:text-[#370A0B] cursor-pointer"
         >
-          &larr; Back
+          &larr; Back to Lab
         </button>
         <h1
           style={{ fontFamily: "Fraunces, serif", color: INK }}
@@ -442,70 +502,57 @@ function SessionLogView({
       </div>
 
       <div
-        className="rounded-2xl p-5 mb-6 text-center shadow-lg"
+        className="rounded-3xl p-6 mb-6 text-center shadow-xl border border-[#C0912E]/30"
         style={{ background: INK }}
       >
         <div
           style={{ fontFamily: "Fraunces, serif", color: CREAM }}
-          className="text-3xl font-bold"
+          className="text-4xl font-bold"
         >
           {formatDuration(totalSeconds)}
         </div>
         <div
           style={{ color: GOLD }}
-          className="text-xs font-semibold uppercase tracking-wide mt-1"
+          className="text-xs font-bold uppercase tracking-wider mt-1.5"
         >
-          {list.length} session{list.length === 1 ? "" : "s"} logged
+          {list.length} Practice Session{list.length === 1 ? "" : "s"} Completed
         </div>
       </div>
 
       {loading && (
-        <p
-          className="text-center text-sm"
-          style={{ color: "rgba(66,10,16,0.55)" }}
-        >
+        <p className="text-center text-sm text-[#420A10]/60 py-4">
           Loading your practice history...
         </p>
       )}
-      {error && (
-        <p className="text-center text-sm" style={{ color: INK }}>
-          {error}
-        </p>
-      )}
+      {error && <p className="text-center text-sm text-red-700 py-4">{error}</p>}
       {!loading && !error && list.length === 0 && (
-        <p
-          className="text-center text-sm"
-          style={{ color: "rgba(66,10,16,0.55)" }}
-        >
-          No sessions saved yet. Practice a cycle, then save it here.
-        </p>
+        <div className="text-center py-8 bg-white/70 rounded-3xl border border-[#420A10]/10 p-6">
+          <Clock className="mx-auto h-8 w-8 text-[#C0912E] mb-2" />
+          <p className="text-sm font-bold text-[#420A10]">No sessions saved yet</p>
+          <p className="text-xs text-[#6B5B52] mt-1">
+            Practice with the metronome, and your riyaaz duration will be saved here.
+          </p>
+        </div>
       )}
 
       <div className="space-y-2">
         {list.map((s, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{
-              background: "rgba(66,10,16,0.05)",
-              border: "1px solid rgba(66,10,16,0.1)",
-            }}
+            className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white border border-[#420A10]/10 shadow-xs"
           >
             <div>
-              <div
-                style={{ color: INK, fontFamily: "Manrope, sans-serif" }}
-                className="text-sm font-semibold"
-              >
+              <div className="text-sm font-bold text-[#420A10]">
                 {s.taal || "Practice"}
               </div>
-              <div style={{ color: "rgba(66,10,16,0.55)" }} className="text-xs">
+              <div className="text-xs text-[#6B5B52]">
                 {s.date}
-                {s.bpm ? " · " + s.bpm + " bpm" : ""}
+                {s.bpm ? ` · ${s.bpm} BPM` : ""}
               </div>
             </div>
             <div
               style={{ color: GOLD, fontFamily: "Fraunces, serif" }}
-              className="font-bold"
+              className="font-bold text-base"
             >
               {formatDuration(s.durationSeconds || 0)}
             </div>
@@ -524,6 +571,7 @@ export default function RhythmLabPage() {
   const [beat, setBeat] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [bpm, setBpm] = useState(80);
+  const [layaMultiplier, setLayaMultiplier] = useState<1 | 2 | 4>(1);
 
   const [theka, setTheka] = useState(true);
   const [nagma, setNagma] = useState(false);
@@ -539,8 +587,10 @@ export default function RhythmLabPage() {
   const [logError, setLogError] = useState<string | null>(null);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const beatRef = useRef(1);
+  beatRef.current = beat;
 
-  const ensureAudio = () => {
+  const ensureAudio = useCallback(() => {
     if (!audioCtxRef.current) {
       const AudioCtxClass =
         window.AudioContext ||
@@ -552,49 +602,56 @@ export default function RhythmLabPage() {
       audioCtxRef.current.resume();
     }
     return audioCtxRef.current;
-  };
+  }, []);
 
-  const playBeatSound = (
-    category: "sam" | "taali" | "khaali" | "plain",
-    bolText: string,
-    beatIndex: number,
-  ) => {
-    const ctx = ensureAudio();
-    if (theka) {
-      if (category === "sam") {
-        clap(ctx, 0.45);
-        tone(ctx, 85, 0.4, "triangle", 0.4);
-      } else if (category === "taali") {
-        clap(ctx, 0.3);
-      } else if (category === "khaali") {
-        tone(ctx, 440, 0.05, "sine", 0.07);
-      } else {
-        tone(ctx, 300, 0.04, "sine", 0.05);
+  const triggerBeatSound = useCallback(
+    (beatNum: number) => {
+      const ctx = ensureAudio();
+      const cat = getCategory(taal, beatNum);
+      const bol = taal.bols[beatNum - 1] || "";
+      const effectiveBpm = bpm * layaMultiplier;
+
+      if (theka) {
+        playTablaTheka(ctx, cat, bol);
       }
-    }
-    if (nagma) playNagma(ctx, beatIndex);
-    if (voiceOn && bolText && bolText !== "S") speakBol(bolText);
-  };
+      if (nagma) {
+        playNagma(ctx, beatNum, matras);
+      }
+      if (voiceOn) {
+        speakBol(bol, effectiveBpm);
+      }
+    },
+    [ensureAudio, taal, bpm, layaMultiplier, theka, nagma, voiceOn, matras],
+  );
 
+  // When taal changes, reset beat
   useEffect(() => {
     setBeat(1);
     setIsPlaying(false);
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
   }, [taalId]);
 
+  // Metronome interval engine
   useEffect(() => {
     if (!isPlaying) return undefined;
-    const ms = 60000 / bpm;
+
+    const effectiveBpm = bpm * layaMultiplier;
+    const ms = 60000 / effectiveBpm;
+
     const id = setInterval(() => {
       setBeat((prev) => {
         const next = prev >= matras ? 1 : prev + 1;
-        playBeatSound(getCategory(taal, next), taal.bols[next - 1], next);
+        triggerBeatSound(next);
         return next;
       });
     }, ms);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying, bpm, taalId, matras, theka, nagma, voiceOn]);
 
+    return () => clearInterval(id);
+  }, [isPlaying, bpm, layaMultiplier, matras, triggerBeatSound]);
+
+  // Session duration timer
   useEffect(() => {
     if (!isPlaying) return undefined;
     const id = setInterval(() => setSessionSeconds((s) => s + 1), 1000);
@@ -626,8 +683,17 @@ export default function RhythmLabPage() {
   }, [view]);
 
   const handlePlayToggle = () => {
-    ensureAudio();
-    setIsPlaying((p) => !p);
+    const nextPlaying = !isPlaying;
+    if (nextPlaying) {
+      ensureAudio();
+      // Play sound immediately on current beat
+      triggerBeatSound(beat);
+    } else {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+    setIsPlaying(nextPlaying);
   };
 
   const handleReset = () => {
@@ -650,7 +716,7 @@ export default function RhythmLabPage() {
           }),
           durationSeconds: sessionSeconds,
           taal: taal.name,
-          bpm,
+          bpm: bpm * layaMultiplier,
           savedAt: Date.now(),
         };
         const current = JSON.parse(
@@ -698,6 +764,10 @@ export default function RhythmLabPage() {
   );
   const activeLaya = LAYAS.find((l) => l.bpm === bpm);
 
+  const activeBol = taal.bols[beat - 1] || "";
+  const activeBolDevanagari =
+    BOL_DEVANAGARI_MAP[activeBol.toLowerCase()] || activeBol;
+
   return (
     <div
       style={{
@@ -709,24 +779,26 @@ export default function RhythmLabPage() {
     >
       <style>{`
         @keyframes popScale { 0% { transform: scale(0.82); } 45% { transform: scale(1.14); } 100% { transform: scale(1); } }
-        @keyframes ringFlash { 0% { box-shadow: 0 0 0 0 rgba(66,10,16,0.22); } 60% { box-shadow: 0 0 0 16px rgba(66,10,16,0); } 100% { box-shadow: 0 0 0 0 rgba(66,10,16,0); } }
-        .beat-pop { animation: popScale 0.32s cubic-bezier(.34,1.56,.64,1); }
-        .beat-ring { animation: ringFlash 0.55s ease-out; }
-        input[type="range"].taal-slider { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 999px; background: rgba(66,10,16,0.15); width: 100%; }
-        input[type="range"].taal-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 999px; background: ${INK}; border: 3px solid ${CREAM}; box-shadow: 0 0 0 1.5px ${INK}; cursor: pointer; margin-top: -8px; }
-        input[type="range"].taal-slider::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; }
-        input[type="range"].taal-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 999px; background: ${INK}; border: 3px solid ${CREAM}; box-shadow: 0 0 0 1.5px ${INK}; cursor: pointer; }
+        @keyframes ringFlash { 0% { box-shadow: 0 0 0 0 rgba(66,10,16,0.22); } 60% { box-shadow: 0 0 0 18px rgba(66,10,16,0); } 100% { box-shadow: 0 0 0 0 rgba(66,10,16,0); } }
+        .beat-pop { animation: popScale 0.3s cubic-bezier(.34,1.56,.64,1); }
+        .beat-ring { animation: ringFlash 0.5s ease-out; }
+        input[type="range"].taal-slider { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 999px; background: rgba(66,10,16,0.15); width: 100%; }
+        input[type="range"].taal-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 999px; background: ${INK}; border: 3px solid ${CREAM}; box-shadow: 0 0 0 2px ${INK}; cursor: pointer; margin-top: -8px; }
+        input[type="range"].taal-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; }
+        input[type="range"].taal-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 999px; background: ${INK}; border: 3px solid ${CREAM}; box-shadow: 0 0 0 2px ${INK}; cursor: pointer; }
       `}</style>
 
       {view === "practice" ? (
-        <div className="w-full max-w-sm">
-          <div className="text-center mb-6">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="text-center mb-5">
             <div
               style={{
                 fontFamily: "var(--font-devanagari), serif",
                 color: GOLD,
-                fontSize: 15,
-                letterSpacing: 1,
+                fontSize: 16,
+                letterSpacing: 1.5,
+                fontWeight: 700,
               }}
             >
               रियाज़
@@ -737,20 +809,18 @@ export default function RhythmLabPage() {
                 color: INK,
                 fontWeight: 700,
               }}
-              className="text-3xl mt-1"
+              className="text-3xl mt-0.5"
             >
               Rhythm Lab
             </h1>
-            <p
-              style={{ color: "rgba(66,10,16,0.55)" }}
-              className="text-sm mt-1"
-            >
-              Feel the cycle before you dance it
+            <p className="text-xs text-[#6B5B52] mt-0.5">
+              Auditory theka, melodic nagma & bol padhant metronome
             </p>
           </div>
 
+          {/* Taal Selector Pill Tabs */}
           <div
-            className="flex gap-2 overflow-x-auto pb-1 mb-6 -mx-1 px-1"
+            className="flex gap-2 overflow-x-auto pb-1 mb-5 -mx-1 px-1"
             style={{ scrollbarWidth: "none" }}
           >
             {PRIMARY_TAALS.map((t) => {
@@ -760,18 +830,17 @@ export default function RhythmLabPage() {
                   key={t.id}
                   type="button"
                   onClick={() => setTaalId(t.id)}
-                  className="shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-colors cursor-pointer"
+                  className="shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95"
                   style={{
-                    fontFamily: "Manrope, sans-serif",
-                    background: active ? INK : "transparent",
+                    background: active ? INK : "#FFFFFF",
                     color: active ? CREAM : INK,
                     border:
                       "1.5px solid " +
-                      (active ? INK : "rgba(66,10,16,0.3)"),
+                      (active ? INK : "rgba(66,10,16,0.2)"),
                   }}
                 >
                   {t.name}{" "}
-                  <span style={{ opacity: 0.65 }}>· {t.bols.length}</span>
+                  <span style={{ opacity: 0.75 }}>· {t.bols.length}</span>
                 </button>
               );
             })}
@@ -781,25 +850,24 @@ export default function RhythmLabPage() {
                 setSearchQuery("");
                 setSearchOpen(true);
               }}
-              className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold cursor-pointer"
+              className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold cursor-pointer shadow-xs active:scale-95"
               style={{
-                fontFamily: "Manrope, sans-serif",
-                background: !isPrimarySelected ? GOLD : "transparent",
+                background: !isPrimarySelected ? GOLD : "#FFFFFF",
                 color: !isPrimarySelected ? INK_DEEP : INK,
                 border:
                   "1.5px solid " +
-                  (!isPrimarySelected ? GOLD : "rgba(66,10,16,0.3)"),
+                  (!isPrimarySelected ? GOLD : "rgba(66,10,16,0.2)"),
               }}
             >
               <Search size={13} />
-              {isPrimarySelected ? "More" : taal.name}
+              {isPrimarySelected ? "More Taals" : taal.name}
             </button>
           </div>
 
           {/* Orbital Circle */}
           <div
-            className="relative mx-auto mb-6"
-            style={{ width: 300, height: 300 }}
+            className="relative mx-auto mb-4"
+            style={{ width: 290, height: 290 }}
           >
             {Array.from({ length: matras }, (_, idx) => idx + 1).map((i) => {
               const angle = (-90 + (i - 1) * (360 / matras)) * (Math.PI / 180);
@@ -835,19 +903,20 @@ export default function RhythmLabPage() {
                         s.border,
                       boxShadow:
                         active && cat !== "khaali"
-                          ? "0 2px 8px rgba(66,10,16,0.35)"
+                          ? "0 2px 10px rgba(66,10,16,0.4)"
                           : "none",
-                      transition: "width 0.2s, height 0.2s",
+                      transition: "width 0.15s, height 0.15s",
                     }}
                   />
                 </div>
               );
             })}
 
-            {/* Pulsing Center Beat */}
+            {/* Pulsing Center Beat & Active Bol */}
             <div
               key={`center-${beat}`}
-              className="beat-pop beat-ring absolute flex flex-col items-center justify-center"
+              className="beat-pop beat-ring absolute flex flex-col items-center justify-center shadow-xl cursor-pointer"
+              onClick={handlePlayToggle}
               style={{
                 left: "50%",
                 top: "50%",
@@ -867,151 +936,144 @@ export default function RhythmLabPage() {
                   color: centerStyle.fg,
                   fontWeight: 700,
                 }}
-                className="text-6xl leading-none"
+                className="text-5xl leading-none"
               >
                 {beat}
               </div>
+
+              {/* Active Bol Banner in Center */}
+              <div className="mt-1 flex items-center gap-1">
+                <span
+                  style={{
+                    color: centerStyle.fg,
+                    fontFamily: "var(--font-devanagari), serif",
+                  }}
+                  className="text-base font-bold"
+                >
+                  {activeBolDevanagari}
+                </span>
+                <span
+                  style={{ color: centerStyle.fg, opacity: 0.8 }}
+                  className="text-xs font-bold uppercase tracking-wider"
+                >
+                  ({activeBol})
+                </span>
+              </div>
+
               <div
                 style={{
                   color: centerStyle.fg,
-                  opacity: 0.75,
+                  opacity: 0.85,
                   fontFamily: "Manrope, sans-serif",
                 }}
-                className="text-xs font-bold tracking-widest uppercase mt-1"
+                className="text-[10px] font-bold tracking-widest uppercase mt-0.5"
               >
-                {CAT_LABEL[currentCat] || `of ${matras}`}
+                {CAT_LABEL[currentCat] || `Mātrā ${beat}`}
               </div>
             </div>
           </div>
 
-          {/* Legend */}
-          <div
-            className="flex justify-center gap-5 mb-6 text-xs"
-            style={{ color: INK, fontFamily: "Manrope, sans-serif" }}
-          >
-            <span className="flex items-center gap-1.5">
-              <span
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 999,
-                  background: INK,
-                  display: "inline-block",
-                }}
-              />
-              Sam
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 999,
-                  background: GOLD,
-                  display: "inline-block",
-                }}
-              />
-              Taali
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 999,
-                  border: `2px dashed ${KHAALI}`,
-                  display: "inline-block",
-                }}
-              />
-              Khaali
-            </span>
+          {/* Active Bol Spotlight Bar */}
+          <div className="mb-4 text-center bg-white/90 rounded-2xl p-3 border border-[#420A10]/15 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-[#6B5B52] mb-1.5 px-1 font-semibold">
+              <span>Current Mātrā: <strong>{beat} / {matras}</strong></span>
+              <span>Laya: <strong className="text-[#C0912E]">{bpm * layaMultiplier} BPM ({layaMultiplier}x)</strong></span>
+            </div>
+
+            <div className="flex items-center justify-center gap-3">
+              <span className="font-devanagari text-2xl font-bold text-[#420A10]">
+                {activeBolDevanagari}
+              </span>
+              <span className="text-xl font-display font-extrabold text-[#C0912E]">
+                {activeBol}
+              </span>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#FFF8E1] text-[#420A10] border border-[#C0912E]/30">
+                {CAT_LABEL[currentCat] || "Plain Beat"}
+              </span>
+            </div>
           </div>
 
-          {/* Bols Grid */}
-          <div className="flex flex-wrap justify-center gap-1.5 mb-6">
-            {taal.bols.map((bol, idx) => {
-              const i = idx + 1;
-              const cat = getCategory(taal, i);
-              const active = i === beat;
-              const s = catStyle(cat, active);
-              const displayBol = bol === "S" ? "–" : bol;
-              return (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 rounded-lg text-sm font-semibold transition-all"
-                  style={{
-                    fontFamily: "Manrope, sans-serif",
-                    fontStyle: bol === "S" ? "italic" : "normal",
-                    background: active ? s.bg : "transparent",
-                    color: active ? s.fg : "rgba(66,10,16,0.55)",
-                    border:
-                      "1.5px " +
-                      (cat === "khaali" && !active ? "dashed" : "solid") +
-                      " " +
-                      (active ? s.border : "rgba(66,10,16,0.15)"),
-                  }}
-                >
-                  {displayBol}
-                </span>
-              );
-            })}
-          </div>
-
-          {/* Toggles (Theka / Nagma / Voice) */}
-          <div className="flex gap-2 mb-6">
+          {/* 3-Way Audio Toggles (Theka / Nagma / Voice) */}
+          <div className="flex gap-2 mb-4">
             <ToggleButton
               active={theka}
-              onClick={() => setTheka((t) => !t)}
+              onClick={() => {
+                ensureAudio();
+                setTheka((t) => !t);
+              }}
               Icon={Volume2}
-              label="Theka"
+              label="Theka (Tabla)"
             />
             <ToggleButton
               active={nagma}
-              onClick={() => setNagma((n) => !n)}
+              onClick={() => {
+                ensureAudio();
+                setNagma((n) => !n);
+              }}
               Icon={Music2}
-              label="Nagma"
+              label="Nagma (Melody)"
             />
             <ToggleButton
               active={voiceOn}
-              onClick={() => setVoiceOn((v) => !v)}
+              onClick={() => {
+                ensureAudio();
+                setVoiceOn((v) => !v);
+              }}
               Icon={Mic}
-              label="Voice"
+              label="Voice (Padhant)"
             />
           </div>
 
-          {/* BPM Slider & Laya Presets */}
-          <div className="mb-6">
+          {/* Laya Multiplier Speed Tabs (1x, 2x, 4x) */}
+          <div className="bg-white/90 rounded-2xl p-3.5 border border-[#420A10]/15 shadow-sm mb-4">
             <div className="flex items-center justify-between mb-2">
-              <span
-                style={{
-                  color: "rgba(66,10,16,0.65)",
-                  fontFamily: "Manrope, sans-serif",
-                }}
-                className="text-xs font-semibold"
-              >
-                Tempo
+              <span className="text-xs font-bold text-[#420A10] flex items-center gap-1.5">
+                <Gauge size={14} className="text-[#C0912E]" />
+                <span>Laya Speed (Layakari)</span>
               </span>
-              <span
-                style={{
-                  fontFamily: "Fraunces, Georgia, serif",
-                  color: INK,
-                  fontWeight: 700,
-                }}
-                className="text-lg"
-              >
-                {bpm}{" "}
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "Manrope, sans-serif",
-                    fontWeight: 600,
-                    opacity: 0.6,
-                  }}
-                >
-                  BPM
-                </span>
+              <span className="text-xs font-extrabold text-[#C0912E]">
+                {bpm * layaMultiplier} BPM
               </span>
             </div>
+
+            {/* Multiplier buttons: 1x (Thah), 2x (Dugun), 4x (Chaugun) */}
+            <div className="grid grid-cols-3 gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => setLayaMultiplier(1)}
+                className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  layaMultiplier === 1
+                    ? "bg-[#420A10] text-[#F5F1E1] shadow-xs"
+                    : "bg-[#F5F1E1] text-[#420A10] hover:bg-[#FFF8E1]"
+                }`}
+              >
+                1x Thah (Single)
+              </button>
+              <button
+                type="button"
+                onClick={() => setLayaMultiplier(2)}
+                className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  layaMultiplier === 2
+                    ? "bg-[#420A10] text-[#F5F1E1] shadow-xs"
+                    : "bg-[#F5F1E1] text-[#420A10] hover:bg-[#FFF8E1]"
+                }`}
+              >
+                2x Dugun (Double)
+              </button>
+              <button
+                type="button"
+                onClick={() => setLayaMultiplier(4)}
+                className={`py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  layaMultiplier === 4
+                    ? "bg-[#420A10] text-[#F5F1E1] shadow-xs"
+                    : "bg-[#F5F1E1] text-[#420A10] hover:bg-[#FFF8E1]"
+                }`}
+              >
+                4x Chaugun (4x)
+              </button>
+            </div>
+
+            {/* BPM Slider */}
             <input
               type="range"
               min="40"
@@ -1020,7 +1082,9 @@ export default function RhythmLabPage() {
               onChange={(e) => setBpm(Number(e.target.value))}
               className="taal-slider cursor-pointer"
             />
-            <div className="flex gap-2 mt-3">
+
+            {/* Classical Tempo Presets */}
+            <div className="grid grid-cols-4 gap-1.5 mt-2.5">
               {LAYAS.map((l) => {
                 const active = activeLaya?.id === l.id;
                 return (
@@ -1028,9 +1092,8 @@ export default function RhythmLabPage() {
                     key={l.id}
                     type="button"
                     onClick={() => setBpm(l.bpm)}
-                    className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+                    className="py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer text-center"
                     style={{
-                      fontFamily: "Manrope, sans-serif",
                       background: active ? INK : "rgba(66,10,16,0.06)",
                       color: active ? CREAM : INK,
                       border: "1px solid " + (active ? INK : "transparent"),
@@ -1043,31 +1106,21 @@ export default function RhythmLabPage() {
             </div>
           </div>
 
-          {/* Controls Bar */}
+          {/* Play / Pause / Reset Bar */}
           <div className="flex items-center justify-center gap-4">
             <button
               type="button"
               onClick={handleReset}
-              className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform active:scale-95"
-              style={{
-                background: "rgba(66,10,16,0.08)",
-                color: INK,
-                border: "1px solid rgba(66,10,16,0.15)",
-              }}
-              title="Reset beat"
+              className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-transform active:scale-90 bg-white border border-[#420A10]/20 shadow-sm"
+              title="Reset beat cycle"
             >
-              <RotateCcw size={18} />
+              <RotateCcw size={18} className="text-[#420A10]" />
             </button>
 
             <button
               type="button"
               onClick={handlePlayToggle}
-              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-transform active:scale-95"
-              style={{
-                background: INK,
-                color: CREAM,
-                boxShadow: "0 6px 20px rgba(66,10,16,0.35)",
-              }}
+              className="w-16 h-16 rounded-full flex items-center justify-center shadow-xl cursor-pointer transition-transform active:scale-95 bg-[#420A10] text-[#F5F1E1] hover:bg-[#370A0B]"
             >
               {isPlaying ? (
                 <Pause size={28} />
@@ -1079,15 +1132,10 @@ export default function RhythmLabPage() {
             <button
               type="button"
               onClick={goToLog}
-              className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-transform active:scale-95"
-              style={{
-                background: "rgba(66,10,16,0.08)",
-                color: INK,
-                border: "1px solid rgba(66,10,16,0.15)",
-              }}
+              className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-transform active:scale-90 bg-white border border-[#420A10]/20 shadow-sm"
               title="Practice log"
             >
-              <Clock size={18} />
+              <Clock size={18} className="text-[#420A10]" />
             </button>
           </div>
         </div>
