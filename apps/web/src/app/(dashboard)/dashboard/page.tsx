@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/use-auth-store";
 import {
   ArrowRight,
   Clock,
+  Mic,
   Music,
   Search,
   Sparkles,
@@ -21,7 +22,6 @@ import {
 
 export default function DashboardPage() {
   const profile = useAuthStore((state) => state.profile);
-
   const isTeacher = profile?.role === "teacher";
 
   return (
@@ -36,15 +36,15 @@ export default function DashboardPage() {
           <div className="inline-flex items-center space-x-2 rounded-full bg-[#C0912E]/25 px-3.5 py-1 text-xs font-bold tracking-wider text-[#E0B454] uppercase border border-[#C0912E]/40">
             <span className="font-devanagari">रियाज़</span>
             <span>·</span>
-            <span>{isTeacher ? "Teacher Portal" : "Student Practice Space"}</span>
+            <span>{isTeacher ? "Teacher Portal" : "Kathak Practice Sanctuary"}</span>
           </div>
           <h1 className="font-display text-3xl font-bold tracking-tight md:text-5xl text-[#F5F1E1]">
             Namaste, {profile?.full_name || "Dancer"} 🙏
           </h1>
           <p className="text-[#E6DFD5] text-sm md:text-base leading-relaxed">
             {isTeacher
-              ? "Manage your Kathak students, assign rhythm practice, and review student performance reports."
-              : "Ready for your daily riyaaz? Practice Teentaal & Jhaptaal with our rhythm metronome, study hand mudras, or search Kathak compositions."}
+              ? "Manage your Kathak disciples, assign rhythmic padhant practice, and review student mudra & bol submissions."
+              : "Ready for your daily riyaaz? Practice thekas with the Rhythm metronome, study Hasta Mudras with Vision AI, recite bols, or search Kathak compositions."}
           </p>
 
           <div className="pt-4 flex flex-wrap gap-3">
@@ -72,11 +72,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Feature Modules Quick Access Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* Rhythm Lab */}
+      {/* 4 Specialized Studio Modules Grid */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Module 1: Rhythm Lab */}
         <Link href="/dashboard/rhythm" className="block group">
-          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between">
+          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between p-1">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="font-display text-lg font-bold text-[#420A10]">
                 Rhythm Lab
@@ -87,10 +87,10 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-xs text-[#5C3B30] leading-relaxed">
-                Interactive Kathak metronome, Web Audio tabla theka clicks, and Laya speed controls.
+                Circular orbital matra metronome, synthesized theka clicks, Nagma loop, and practice logger.
               </p>
               <div className="flex items-center justify-between text-xs font-bold text-[#C0912E] pt-2 border-t border-stone-100">
-                <span>Open Rhythm Metronome →</span>
+                <span>Open Rhythm →</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
                   Interactive
                 </span>
@@ -99,9 +99,9 @@ export default function DashboardPage() {
           </Card>
         </Link>
 
-        {/* Mudra Studio */}
+        {/* Module 2: Mudra Studio */}
         <Link href="/dashboard/mudras" className="block group">
-          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between">
+          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between p-1">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="font-display text-lg font-bold text-[#420A10]">
                 Mudra Studio
@@ -112,21 +112,46 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-xs text-[#5C3B30] leading-relaxed">
-                Live webcam studio with full Asamyuta and Samyuta Hastas reference catalog.
+                Live MediaPipe vision AI camera with 10-mudra classifier & finger-by-finger biomechanical feedback.
               </p>
               <div className="flex items-center justify-between text-xs font-bold text-[#C0912E] pt-2 border-t border-stone-100">
-                <span>Explore Mudra Gallery →</span>
+                <span>Open Studio →</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
-                  Interactive
+                  Vision AI
                 </span>
               </div>
             </CardContent>
           </Card>
         </Link>
 
-        {/* Kathak Search */}
+        {/* Module 3: Bol Trainer */}
+        <Link href="/dashboard/bols" className="block group">
+          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between p-1">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="font-display text-lg font-bold text-[#420A10]">
+                Bol Trainer
+              </CardTitle>
+              <div className="rounded-xl bg-[#FFF3E0] p-2.5 text-[#420A10] group-hover:scale-110 transition-transform">
+                <Mic className="h-5 w-5 text-[#C0912E]" />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-[#5C3B30] leading-relaxed">
+                Kathak composition player, live mic recorder with waveform visualizer & audio quality analysis.
+              </p>
+              <div className="flex items-center justify-between text-xs font-bold text-[#C0912E] pt-2 border-t border-stone-100">
+                <span>Practice Bols →</span>
+                <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
+                  Speech AI
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+
+        {/* Module 4: Kathak Search */}
         <Link href="/dashboard/search" className="block group">
-          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between">
+          <Card className="border-[#420A10]/15 bg-white group-hover:border-[#C0912E] group-hover:shadow-lg transition-all rounded-3xl h-full flex flex-col justify-between p-1">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="font-display text-lg font-bold text-[#420A10]">
                 Kathak Search
@@ -137,12 +162,12 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-xs text-[#5C3B30] leading-relaxed">
-                Kathak terminology dictionary and YouTube video timestamp deep-linking.
+                Search Kathak terminology and jump straight to exact timestamps in master video recordings.
               </p>
               <div className="flex items-center justify-between text-xs font-bold text-[#C0912E] pt-2 border-t border-stone-100">
                 <span>Search Compositions →</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
-                  Interactive
+                  Timestamp AI
                 </span>
               </div>
             </CardContent>
@@ -156,26 +181,31 @@ export default function DashboardPage() {
         <Card className="border-[#420A10]/15 bg-white rounded-3xl p-2">
           <CardHeader>
             <CardTitle className="font-display text-xl font-bold text-[#420A10]">
-              {isTeacher ? "Pending Student Submissions" : "Recent Practice Sessions"}
+              {isTeacher ? "Pending Student Submissions" : "Daily Practice Session"}
             </CardTitle>
             <CardDescription className="text-xs text-[#6B5B52]">
               {isTeacher
-                ? "Video reviews submitted by your registered Kathak students"
-                : "Your daily riyaaz activity and rhythm session tracking"}
+                ? "Video & bol reviews submitted by your registered Kathak students"
+                : "Track your riyaaz streaks, rhythm timings, and mudra accuracy"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-[#420A10]/20 rounded-2xl bg-[#FDFAF2]/70">
+            <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed border-[#420A10]/20 rounded-2xl bg-[#FDFAF2]/70">
               <Clock className="h-8 w-8 text-[#C0912E] mb-2" />
               <p className="text-sm font-bold text-[#420A10]">
-                Ready for practice!
+                Ready for today&apos;s riyaaz!
               </p>
               <p className="text-xs text-[#6B5B52] max-w-xs mt-1">
-                Head over to the <strong>Rhythm Lab</strong> to start practicing with Teentaal, Jhaptaal, or Ektaal.
+                Choose between <strong>Rhythm Lab</strong>, <strong>Mudra Studio</strong>, or <strong>Bol Trainer</strong> to begin.
               </p>
-              <Button asChild size="sm" className="mt-4 bg-[#420A10] text-[#F5F1E1] hover:bg-[#370A0B] text-xs font-bold rounded-xl px-4 py-2">
-                <Link href="/dashboard/rhythm">Launch Metronome</Link>
-              </Button>
+              <div className="flex gap-2 mt-4">
+                <Button asChild size="sm" className="bg-[#420A10] text-[#F5F1E1] hover:bg-[#370A0B] text-xs font-bold rounded-xl px-4 py-2">
+                  <Link href="/dashboard/rhythm">Launch Metronome</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline" className="border-[#C0912E]/40 text-[#420A10] text-xs font-bold rounded-xl px-4 py-2">
+                  <Link href="/dashboard/mudras">Open Mudras</Link>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -185,38 +215,38 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle className="font-display text-xl font-bold text-[#420A10] flex items-center gap-2">
               <Trophy size={18} className="text-[#C0912E]" />
-              <span>Platform Engineering Roadmap</span>
+              <span>Unified Platform Capabilities</span>
             </CardTitle>
             <CardDescription className="text-xs text-[#6B5B52]">
-              RIYAAZ multi-year modular architecture & milestone progress
+              Multi-studio Indian Classical Dance technology stack
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3.5">
-            <div className="flex items-center space-x-3 p-3.5 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-sm">
+          <CardContent className="space-y-3">
+            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-xs">
               <span className="h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
               <div>
-                <strong className="font-bold text-emerald-950">Phase 0 Architecture Foundation</strong>: FastAPI Async Engine, PostgreSQL & Next.js Monorepo.
+                <strong className="font-bold">Rhythm Synthesis Engine</strong>: Web Audio API tabla claps, Sam/Taali/Khaali acoustics, and Nagma loop.
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 p-3.5 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-sm">
+            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-xs">
               <span className="h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
               <div>
-                <strong className="font-bold text-emerald-950">Phase 1 Identity & Dashboard</strong>: Supabase Auth, PostgreSQL Users Table, and Route Guards.
+                <strong className="font-bold">MediaPipe Vision AI Studio</strong>: Real-time hand landmark tracking and 10-mudra neural classifier.
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 p-3.5 rounded-2xl bg-amber-50 text-amber-950 text-xs border border-[#C0912E]/40 shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-[#C0912E] flex-shrink-0 animate-pulse" />
+            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-xs">
+              <span className="h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
               <div>
-                <strong className="font-bold text-amber-950">Phase 2 Rhythm Engine & Search</strong>: Interactive Web Audio metronome, Taal catalog & Kathak search studio.
+                <strong className="font-bold">Bol Speech Recognition</strong>: Microphone audio recorder, waveform analyzer & Sarvam AI STT bridge.
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 p-3.5 rounded-2xl bg-stone-100 text-stone-800 text-xs border border-stone-200">
-              <span className="h-2 w-2 rounded-full bg-stone-400 flex-shrink-0" />
+            <div className="flex items-center space-x-3 p-3 rounded-2xl bg-emerald-50 text-emerald-950 text-xs border border-emerald-200/60 shadow-xs">
+              <span className="h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
               <div>
-                <strong className="font-bold text-stone-900">Phase 3 & 4 Mudra & Bol AI</strong>: MediaPipe vision pose estimation & Whisper bol speech recognition.
+                <strong className="font-bold">Kathak Video Search</strong>: YouTube transcript parser, normalized terminology dictionary & deep-linking.
               </div>
             </div>
           </CardContent>

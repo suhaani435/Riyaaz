@@ -10,6 +10,7 @@ import {
   Home,
   LogOut,
   Menu,
+  Mic,
   Music,
   Search,
   Sparkles,
@@ -81,9 +82,8 @@ export default function DashboardLayout({
     { name: "Overview", href: "/dashboard", icon: Home },
     { name: "Rhythm Lab", href: "/dashboard/rhythm", icon: Music },
     { name: "Mudra Studio", href: "/dashboard/mudras", icon: Sparkles },
+    { name: "Bol Trainer", href: "/dashboard/bols", icon: Mic },
     { name: "Kathak Search", href: "/dashboard/search", icon: Search },
-    { name: "Bol Practice", href: "/dashboard/bols", icon: Compass },
-    { name: "History", href: "/dashboard/history", icon: Calendar },
   ];
 
   if (profile?.role === "teacher") {

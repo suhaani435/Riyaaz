@@ -6,7 +6,6 @@ for local development but must never be committed.
 """
 
 from enum import StrEnum
-from typing import Annotated
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict

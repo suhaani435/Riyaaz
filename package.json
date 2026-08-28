@@ -6,6 +6,9 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=@riyaaz/web",
+    "build": "npm run web:build",
+    "test": "npm run web:test",
+    "lint": "npm run web:lint",
     "web:dev": "npm run dev --workspace=@riyaaz/web",
     "web:build": "npm run build --workspace=@riyaaz/web",
     "web:lint": "npm run lint --workspace=@riyaaz/web",

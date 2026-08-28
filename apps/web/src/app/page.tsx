@@ -106,64 +106,85 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Rhythm Lab */}
-            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-8 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
+            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
               <div>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
-                  <Music className="h-6 w-6 text-[#C0912E]" />
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
+                  <Music className="h-5 w-5 text-[#C0912E]" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#420A10] mb-2">
+                <h3 className="font-display text-xl font-bold text-[#420A10] mb-2">
                   Rhythm Lab
                 </h3>
                 <p className="text-[#5C3B30] text-xs leading-relaxed">
-                  Web Audio metronome calibrated for Teentaal, Jhaptaal, Ektaal, and Dhamaar. Includes synthesized tabla theka clicks and Vilambit, Madhya, and Drut laya presets.
+                  Orbital matra metronome calibrated for Teentaal, Jhaptaal, and Ektaal with synthesized tabla clicks and Laya presets.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#C0912E]">
-                <span>Interactive Metronome</span>
+                <span>Metronome</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
-                  Live
+                  Interactive
                 </span>
               </div>
             </div>
 
             {/* Card 2: Mudra Studio */}
-            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-8 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
+            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
               <div>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
-                  <Sparkles className="h-6 w-6 text-[#C0912E]" />
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
+                  <Sparkles className="h-5 w-5 text-[#C0912E]" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#420A10] mb-2">
+                <h3 className="font-display text-xl font-bold text-[#420A10] mb-2">
                   Mudra Studio
                 </h3>
                 <p className="text-[#5C3B30] text-xs leading-relaxed">
-                  Interactive reference catalog for all 28 Asamyuta and 24 Samyuta Hastas from the Abhinaya Darpana, paired with a live webcam practice canvas.
+                  Real MediaPipe Vision AI hand tracking for 10 Abhinaya Darpana mudras with finger-by-finger biomechanical correction.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#C0912E]">
-                <span>Vision AI Ready</span>
+                <span>Vision AI</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
                   Live
                 </span>
               </div>
             </div>
 
-            {/* Card 3: Kathak Search */}
-            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-8 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
+            {/* Card 3: Bol Trainer */}
+            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
               <div>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
-                  <Search className="h-6 w-6 text-[#C0912E]" />
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
+                  <Zap className="h-5 w-5 text-[#C0912E]" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#420A10] mb-2">
-                  Kathak Search
+                <h3 className="font-display text-xl font-bold text-[#420A10] mb-2">
+                  Bol Trainer
                 </h3>
                 <p className="text-[#5C3B30] text-xs leading-relaxed">
-                  Search terminology across compositions (tukdas, parans, tihais, chakkars) and jump straight to the exact second where masters perform them.
+                  Kathak composition player, live mic recorder with waveform visualizer & Sarvam AI bol speech recognition.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#C0912E]">
-                <span>Timestamp Discovery</span>
+                <span>Speech AI</span>
+                <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
+                  Live
+                </span>
+              </div>
+            </div>
+
+            {/* Card 4: Kathak Search */}
+            <div className="rounded-3xl border border-[#420A10]/15 bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#C0912E] transition-all flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[#FFF3E0] text-[#420A10] shadow-sm">
+                  <Search className="h-6 w-6 text-[#C0912E]" />
+                </div>
+                <h3 className="font-display text-xl font-bold text-[#420A10] mb-2">
+                  Kathak Search
+                </h3>
+                <p className="text-[#5C3B30] text-xs leading-relaxed">
+                  Search terminology across classical compositions and jump straight to the exact second where masters perform them.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#C0912E]">
+                <span>Deep Links</span>
                 <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
                   Live
                 </span>
