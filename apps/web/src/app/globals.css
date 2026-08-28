@@ -1,15 +1,24 @@
 @import "tailwindcss";
 
 /*
- * RIYAAZ Design Tokens
+ * RIYAAZ Design Tokens & Cultural Theme
  *
- * A warm, earthy palette inspired by Kathak's connection to Indian
- * classical tradition. Ambers and saffrons evoke ghungroos and stage
- * warmth; deep stones ground the interface.
+ * Warm, regal, earthy palette inspired by Kathak classical traditions.
+ * Deep Burgundy Ink (#420A10), Antique Gold (#C0912E), Sandstone Khaali (#9C8F7E),
+ * and Silk Cream (#F5F1E1).
  */
 
 :root {
   color-scheme: light;
+
+  /* --- Cultural Theme Colors --- */
+  --ink: #420A10;
+  --ink-deep: #370A0B;
+  --gold: #C0912E;
+  --gold-light: #E0B454;
+  --khaali: #9C8F7E;
+  --cream: #F5F1E1;
+  --cream-light: #FDFAF2;
 
   /* --- Brand palette --- */
   --color-brand-50: #fffaf5;
@@ -21,7 +30,7 @@
   --color-brand-600: #f57c00;
   --color-brand-700: #ef6c00;
   --color-brand-800: #e65100;
-  --color-brand-900: #bf360c;
+  --color-brand-900: #420A10;
 
   /* --- Saffron accent --- */
   --color-saffron-50: #fff8e1;
@@ -29,11 +38,11 @@
   --color-saffron-200: #ffe082;
   --color-saffron-300: #ffd54f;
   --color-saffron-400: #ffca28;
-  --color-saffron-500: #ffc107;
-  --color-saffron-600: #ffb300;
-  --color-saffron-700: #ffa000;
-  --color-saffron-800: #ff8f00;
-  --color-saffron-900: #ff6f00;
+  --color-saffron-500: #C0912E;
+  --color-saffron-600: #A87D24;
+  --color-saffron-700: #8E671C;
+  --color-saffron-800: #745214;
+  --color-saffron-900: #573C0C;
 
   /* --- Stone neutrals --- */
   --color-stone-50: #fafaf9;
@@ -48,23 +57,25 @@
   --color-stone-900: #1c1917;
 
   /* --- Semantic colours --- */
-  --color-background: var(--color-brand-50);
-  --color-foreground: var(--color-stone-900);
-  --color-muted: var(--color-stone-500);
-  --color-muted-foreground: var(--color-stone-600);
-  --color-border: var(--color-stone-200);
-  --color-ring: var(--color-brand-400);
-  --color-primary: var(--color-brand-600);
-  --color-primary-foreground: #ffffff;
-  --color-accent: var(--color-saffron-500);
-  --color-accent-foreground: var(--color-stone-900);
+  --color-background: var(--cream-light);
+  --color-foreground: var(--ink);
+  --color-muted: var(--khaali);
+  --color-muted-foreground: #6B5B52;
+  --color-border: rgba(66, 10, 16, 0.15);
+  --color-ring: var(--gold);
+  --color-primary: var(--ink);
+  --color-primary-foreground: var(--cream);
+  --color-accent: var(--gold);
+  --color-accent-foreground: var(--ink-deep);
   --color-success: #16a34a;
-  --color-warning: var(--color-saffron-600);
-  --color-destructive: #dc2626;
+  --color-warning: var(--gold);
+  --color-destructive: #b91c1c;
 
   /* --- Typography --- */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", var(--font-sans);
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-fraunces), serif;
+  --font-body: var(--font-manrope), sans-serif;
+  --font-devanagari: var(--font-devanagari), serif;
 
   /* --- Spacing scale (rem) --- */
   --space-1: 0.25rem;
@@ -87,10 +98,10 @@
   --radius-full: 9999px;
 
   /* --- Shadows --- */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 2px 0 rgb(66 10 16 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(66 10 16 / 0.08), 0 2px 4px -2px rgb(66 10 16 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(66 10 16 / 0.1), 0 4px 6px -4px rgb(66 10 16 / 0.06);
+  --shadow-xl: 0 20px 25px -5px rgb(66 10 16 / 0.12), 0 8px 10px -6px rgb(66 10 16 / 0.08);
 
   /* --- Transitions --- */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -103,15 +114,63 @@ body {
   margin: 0;
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-body), var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-devanagari {
+  font-family: var(--font-devanagari);
+}
+
+.bg-ink {
+  background-color: var(--ink);
+}
+
+.bg-ink-deep {
+  background-color: var(--ink-deep);
+}
+
+.bg-gold {
+  background-color: var(--gold);
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.text-ink {
+  color: var(--ink);
+}
+
+.text-gold {
+  color: var(--gold);
+}
+
+.text-khaali {
+  color: var(--khaali);
+}
+
+.border-ink {
+  border-color: var(--ink);
+}
+
+.border-gold {
+  border-color: var(--gold);
 }
 
 /*
  * Smooth focus ring for accessibility.
  */
 :focus-visible {
-  outline: 2px solid var(--color-ring);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }

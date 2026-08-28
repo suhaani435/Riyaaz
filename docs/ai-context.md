@@ -67,21 +67,18 @@ Any AI working on this codebase MUST abide by the following rules:
 - Frontend foundation: Next.js configured with shadcn/ui (stone + saffron Kathak-inspired theme), TanStack Query provider, `api-client.ts` fetch wrapper.
 - Testing: `pytest-asyncio` with SQLite in-memory fixtures. Vitest on frontend.
 
-### ✅ What is Done (Phase 1: Authentication & Dashboard)
+### ✅ What is Done (Phase 1 & Interactive Checkpoint Suite)
 *Completed on the `phase-1/auth-and-dashboard` branch.*
 - PostgreSQL `users` table created with Alembic migration `0001_create_users_table`.
 - FastAPI Clean Architecture `identity` module (Domain entities, Use cases, SQLAlchemy repository, PyJWT Auth provider, dependencies, and `/api/v1/identity/*` endpoints).
 - Supabase Auth integration on frontend (`@supabase/supabase-js` & `@supabase/ssr`).
 - Form pages (`/login`, `/signup`) with Zod validation, role selection (Student vs Teacher), and auth callback route.
 - Next.js auth middleware (`src/middleware.ts`) protecting `/dashboard/*` routes.
-- Responsive Dashboard Layout shell with sidebar, topbar, user profile avatar, and role-based student/teacher home views.
-- Full test coverage (7 integration tests passing on backend, Vitest + Next build passing on web).
-
-### 🚀 What is Next (Phase 2: Rhythm Engine)
-- BPM metronome audio engine (Tone.js / Web Audio API).
-- Taal catalog (Teentaal 16 beats, Jhaptal 10 beats, Ektaal 12 beats, Rupak 7 beats).
-- Nagma audio loop playback & tempo synchronization.
-- Practice Session tracking data model & API endpoints.
+- **Cultural Design System**: Fraunces display typography, Manrope body font, Noto Serif Devanagari (`रियाज़`), and regal palette (Ink `#420A10`, Gold `#C0912E`, Cream `#F5F1E1`).
+- **Interactive Rhythm Lab (`/dashboard/rhythm`)**: Web Audio tabla theka clicks (Sam, Taali, Khaali), Nagma synthesizer, Web Speech bol voice, and continuous Laya tempo controls across 9 Kathak Taals.
+- **Mudra Studio (`/dashboard/mudras`)**: Live webcam feed toggle and full Asamyuta & Samyuta Hastas interactive catalog with Sanskrit definitions and viniyoga symbolism.
+- **Kathak Knowledge & Timestamp Search (`/dashboard/search`)**: Terminology search with spelling variation normalization and timestamped video deep-links.
+- Full test coverage (7 backend integration tests passing on pytest, Vitest passing on web, 10 static routes building cleanly on Next.js 16).
 
 ### 🔮 What is Further (Phases 2 - 8)
 - **Phase 2:** Rhythm Engine (BPM, Taal, Nagma, Session Tracking).

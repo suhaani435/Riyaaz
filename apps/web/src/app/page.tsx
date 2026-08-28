@@ -1,23 +1,218 @@
-const platformCapabilities = ["Rhythm practice", "Bol feedback", "Mudra learning"];
+"use client";
+
+import Link from "next/link";
+import {
+  ArrowRight,
+  Music,
+  Search,
+  Sparkles,
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-16">
-      <p className="text-sm font-semibold tracking-[0.2em] text-amber-800">RIYAAZ</p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-        Practice Kathak with intention.
-      </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-700">
-        RIYAAZ is building a considered practice space for students and teachers.
-      </p>
-      <ul className="mt-8 flex flex-wrap gap-3" aria-label="Planned capabilities">
-        {platformCapabilities.map((capability) => (
-          <li className="rounded-full bg-amber-100 px-4 py-2 text-sm text-amber-950" key={capability}>
-            {capability}
-          </li>
-        ))}
-      </ul>
-      <p className="mt-10 text-sm text-stone-600">Platform foundation is operational.</p>
-    </main>
+    <div className="min-h-screen bg-[#FDFAF2] text-ink selection:bg-gold/30 selection:text-ink">
+      {/* Top Navbar */}
+      <header className="sticky top-0 z-40 border-b border-stone-200/80 bg-[#F5F1E1]/80 backdrop-blur-md px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="font-devanagari text-2xl font-bold text-gold">
+              रियाज़
+            </div>
+            <div className="h-4 w-px bg-stone-300" />
+            <div className="font-display text-xl font-bold tracking-widest text-ink">
+              RIYAAZ
+            </div>
+          </Link>
+
+          <div className="flex items-center space-x-3">
+            <Button
+              asChild
+              variant="ghost"
+              className="text-stone-700 hover:text-ink text-xs font-semibold"
+            >
+              <Link href="/login">Sign In</Link>
+            </Button>
+            <Button
+              asChild
+              className="bg-ink text-cream hover:bg-ink-deep text-xs font-semibold rounded-xl shadow-md px-4"
+            >
+              <Link href="/signup">Get Started</Link>
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden px-6 pt-16 pb-20 md:pt-24 md:pb-28">
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center space-x-2 rounded-full border border-gold/40 bg-amber-50/80 px-4 py-1.5 text-xs font-bold text-amber-900 shadow-sm mb-6">
+            <Sparkles size={13} className="text-gold" />
+            <span className="font-devanagari">शास्त्रीय कथक साधना</span>
+            <span>·</span>
+            <span>Intelligent Kathak Practice Platform</span>
+          </div>
+
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-ink leading-[1.15]">
+            Practice Kathak with{" "}
+            <span className="text-gold italic underline decoration-gold/40 decoration-wavy underline-offset-8">
+              Intention
+            </span>{" "}
+            & Precision.
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-stone-700 leading-relaxed font-body">
+            RIYAAZ is a dedicated digital sanctuary for Kathak dancers and gurus.
+            Master your <strong>Laya</strong> with high-precision metronomes, explore 
+            <strong> Hasta Mudras</strong>, and discover classical compositions with 
+            timestamped video mastery.
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Button
+              asChild
+              className="bg-ink text-cream hover:bg-ink-deep font-bold text-sm rounded-2xl px-7 py-3.5 shadow-xl hover:scale-105 transition-all"
+            >
+              <Link href="/dashboard" className="flex items-center">
+                <span>Enter Practice Studio</span>
+                <ArrowRight className="ml-2 h-4 w-4 text-gold" />
+              </Link>
+            </Button>
+
+            <Button
+              asChild
+              variant="outline"
+              className="border-stone-300 bg-white/80 text-ink hover:bg-amber-50/60 font-semibold text-sm rounded-2xl px-6 py-3.5 shadow-sm"
+            >
+              <Link href="/signup">Create Free Account</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights Grid */}
+      <section className="px-6 py-16 bg-[#F5F1E1]/60 border-y border-stone-200/80">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <span className="font-devanagari text-gold text-base font-bold">
+              मंच एवं तकनीक
+            </span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-ink mt-1">
+              Engineered for Classical Rigor
+            </h2>
+            <p className="text-stone-600 text-sm mt-2 max-w-xl mx-auto">
+              Built on clean architecture with Web Audio synthesis, vision AI, and structured Kathak ontology.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Card 1: Rhythm Lab */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-gold transition-all flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-900 shadow-sm">
+                  <Music className="h-6 w-6" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-ink mb-2">
+                  Rhythm Lab
+                </h3>
+                <p className="text-stone-600 text-xs leading-relaxed">
+                  Web Audio metronome calibrated for Teentaal, Jhaptaal, Ektaal, and Dhamaar. Includes synthesized tabla theka clicks and Vilambit, Madhya, and Drut laya presets.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-gold">
+                <span>Interactive Metronome</span>
+                <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px]">
+                  Live
+                </span>
+              </div>
+            </div>
+
+            {/* Card 2: Mudra Studio */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-gold transition-all flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-900 shadow-sm">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-ink mb-2">
+                  Mudra Studio
+                </h3>
+                <p className="text-stone-600 text-xs leading-relaxed">
+                  Interactive reference catalog for all 28 Asamyuta and 24 Samyuta Hastas from the Abhinaya Darpana, paired with a live webcam practice canvas.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-gold">
+                <span>Vision AI Ready</span>
+                <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px]">
+                  Live
+                </span>
+              </div>
+            </div>
+
+            {/* Card 3: Kathak Search */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-gold transition-all flex flex-col justify-between">
+              <div>
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-900 shadow-sm">
+                  <Search className="h-6 w-6" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-ink mb-2">
+                  Kathak Search
+                </h3>
+                <p className="text-stone-600 text-xs leading-relaxed">
+                  Search terminology across compositions (tukdas, parans, tihais, chakkars) and jump straight to the exact second where masters perform them.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-gold">
+                <span>Timestamp Discovery</span>
+                <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px]">
+                  Live
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Production Architecture Credibility Banner */}
+      <section className="px-6 py-16">
+        <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-to-br from-[#370A0B] to-[#420A10] p-8 md:p-10 text-cream shadow-2xl border border-gold/30">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 text-center md:text-left">
+              <div className="inline-flex items-center space-x-2 text-xs font-bold text-gold uppercase tracking-wider">
+                <Zap size={14} />
+                <span>Long-Term Production Architecture</span>
+              </div>
+              <h3 className="font-display text-2xl md:text-3xl font-bold text-cream">
+                Built to Scale for Tens of Thousands of Dancers
+              </h3>
+              <p className="text-xs md:text-sm text-stone-300 max-w-xl">
+                FastAPI Clean Architecture, PostgreSQL Async ORM, Supabase Auth, Web Audio API, and Next.js 16 SSR.
+              </p>
+            </div>
+
+            <Button
+              asChild
+              className="bg-gold text-[#370A0B] hover:bg-amber-400 font-bold rounded-xl px-6 py-3 shadow-lg flex-shrink-0"
+            >
+              <Link href="/dashboard">Launch Dashboard</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-stone-200/80 bg-[#F5F1E1] px-6 py-8 text-center text-xs text-stone-600">
+        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center space-x-2">
+            <span className="font-devanagari text-gold font-bold text-sm">रियाज़</span>
+            <span>·</span>
+            <span className="font-display font-bold text-ink">RIYAAZ © 2026</span>
+          </div>
+          <p className="text-stone-500">
+            Dedicated to the preservation and structured practice of Indian Classical Dance.
+          </p>
+        </div>
+      </footer>
+    </div>
   );
 }

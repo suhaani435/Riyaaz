@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   Music,
+  Search,
   Sparkles,
   Users,
   X,
@@ -46,7 +47,9 @@ export default function DashboardLayout({
           if (user) {
             const synced = await api.post<UserProfile>("/identity/sync", {
               full_name:
-                user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
+                user.user_metadata?.full_name ||
+                user.email?.split("@")[0] ||
+                "Dancer",
               role: user.user_metadata?.role || "student",
             });
             setProfile(synced);
@@ -72,7 +75,8 @@ export default function DashboardLayout({
   const navItems = [
     { name: "Overview", href: "/dashboard", icon: Home },
     { name: "Rhythm Lab", href: "/dashboard/rhythm", icon: Music },
-    { name: "Mudra Guide", href: "/dashboard/mudras", icon: Sparkles },
+    { name: "Mudra Studio", href: "/dashboard/mudras", icon: Sparkles },
+    { name: "Kathak Search", href: "/dashboard/search", icon: Search },
     { name: "Bol Practice", href: "/dashboard/bols", icon: Compass },
     { name: "History", href: "/dashboard/history", icon: Calendar },
   ];
@@ -83,25 +87,28 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-[#fffaf5]">
+    <div className="flex min-h-screen bg-[#FDFAF2]">
       {/* Mobile Sidebar overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-stone-900/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-stone-900/60 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar Component */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200 bg-white shadow-sm transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-stone-200/80 bg-[#F5F1E1] shadow-md transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between px-6 border-b border-stone-100">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-xl font-bold tracking-widest text-amber-900">
+        <div className="flex h-20 items-center justify-between px-6 border-b border-stone-200/60">
+          <Link href="/dashboard" className="flex flex-col">
+            <span className="font-devanagari text-xs text-gold font-bold tracking-widest uppercase">
+              रियाज़
+            </span>
+            <span className="font-display text-2xl font-bold tracking-wider text-ink">
               RIYAAZ
             </span>
           </Link>
@@ -114,7 +121,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 space-y-1 px-4 py-6">
+        <nav className="flex-1 space-y-1.5 px-4 py-6">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -123,15 +130,15 @@ export default function DashboardLayout({
                 key={item.name}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center space-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                className={`flex items-center space-x-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
                   isActive
-                    ? "bg-amber-100/70 text-amber-900 shadow-sm font-semibold"
-                    : "text-stone-600 hover:bg-stone-100 hover:text-stone-900"
+                    ? "bg-ink text-cream shadow-md font-bold scale-[1.02]"
+                    : "text-stone-700 hover:bg-amber-100/50 hover:text-ink"
                 }`}
               >
                 <Icon
-                  className={`h-5 w-5 ${
-                    isActive ? "text-amber-700" : "text-stone-400"
+                  className={`h-4 w-4 ${
+                    isActive ? "text-gold" : "text-stone-500"
                   }`}
                 />
                 <span>{item.name}</span>
@@ -141,12 +148,15 @@ export default function DashboardLayout({
         </nav>
 
         {/* Sidebar Footer - Role Badge */}
-        <div className="p-4 border-t border-stone-100">
-          <div className="rounded-lg bg-amber-50/80 p-3 text-xs text-amber-900">
-            <div className="font-semibold capitalize">
-              Role: {profile?.role || "Student"}
+        <div className="p-4 border-t border-stone-200/60">
+          <div className="rounded-2xl border border-gold/30 bg-amber-50/80 p-3.5 text-xs text-ink shadow-sm">
+            <div className="font-bold capitalize flex items-center justify-between">
+              <span>{profile?.role || "Student"} Workspace</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
-            <div className="mt-0.5 text-amber-700">Kathak Practice Workspace</div>
+            <div className="mt-1 text-[11px] text-stone-600 font-medium">
+              Kathak Practice & Riyaaz Portal
+            </div>
           </div>
         </div>
       </aside>
@@ -154,10 +164,10 @@ export default function DashboardLayout({
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-x-hidden">
         {/* Top Navigation Bar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-stone-200 bg-white/80 px-6 backdrop-blur-md">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-stone-200/80 bg-white/80 px-6 backdrop-blur-md">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="text-stone-600 hover:text-stone-900 lg:hidden"
+            className="text-stone-700 hover:text-stone-900 lg:hidden"
           >
             <Menu className="h-6 w-6" />
           </button>
@@ -165,14 +175,14 @@ export default function DashboardLayout({
           <div className="flex items-center space-x-4 ml-auto">
             {/* User Avatar & Menu */}
             <div className="flex items-center space-x-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-200 text-amber-900 font-bold text-sm">
-                {profile?.full_name?.charAt(0).toUpperCase() || "U"}
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-cream font-display font-bold text-sm shadow-sm border border-gold/30">
+                {profile?.full_name?.charAt(0).toUpperCase() || "D"}
               </div>
               <div className="hidden md:block text-left">
-                <div className="text-sm font-semibold text-stone-900">
-                  {profile?.full_name || "User"}
+                <div className="text-xs font-bold text-ink">
+                  {profile?.full_name || "Kathak Dancer"}
                 </div>
-                <div className="text-xs text-stone-500">{profile?.email}</div>
+                <div className="text-[10px] text-stone-500 font-medium">{profile?.email}</div>
               </div>
             </div>
 
@@ -180,9 +190,9 @@ export default function DashboardLayout({
               variant="outline"
               size="sm"
               onClick={handleSignOut}
-              className="text-stone-600 hover:text-red-700 border-stone-300"
+              className="text-stone-700 hover:text-red-700 border-stone-300 rounded-xl text-xs"
             >
-              <LogOut className="h-4 w-4 md:mr-2" />
+              <LogOut className="h-3.5 w-3.5 md:mr-1.5" />
               <span className="hidden md:inline">Sign Out</span>
             </Button>
           </div>
