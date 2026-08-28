@@ -45,15 +45,15 @@ class Settings(BaseSettings):
     )
 
     # --- CORS ---
-    cors_origins: Annotated[list[str], Field(default_factory=list)]
+    cors_origins: list[str] | str = Field(default_factory=list)
 
-    @field_validator("cors_origins", mode="before")
+    @field_validator("cors_origins", mode="after")
     @classmethod
-    def _parse_cors_origins(cls, value: object) -> list[str]:
+    def _parse_cors_origins(cls, value: list[str] | str) -> list[str]:
         """Accept a comma-separated string or an already-parsed list."""
         if isinstance(value, str):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
-        return list(value)  # type: ignore[arg-type]
+        return list(value)
 
     # --- Supabase ---
     supabase_url: str = ""
