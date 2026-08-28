@@ -66,8 +66,13 @@ export default function DashboardLayout({
   }, [profile, setProfile]);
 
   const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    document.cookie = "riyaaz_demo_session=; path=/; max-age=0";
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch {
+      // ignore
+    }
     reset();
     router.push("/login");
   };

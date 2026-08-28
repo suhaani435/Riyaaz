@@ -40,18 +40,19 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const hasDemoCookie = request.cookies.get("riyaaz_demo_session")?.value;
   const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
   const isAuthRoute =
     request.nextUrl.pathname === "/login" ||
     request.nextUrl.pathname === "/signup";
 
-  if (isDashboardRoute && !user) {
+  if (isDashboardRoute && !user && !hasDemoCookie) {
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirect", request.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (isAuthRoute && user) {
+  if (isAuthRoute && (user || hasDemoCookie)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

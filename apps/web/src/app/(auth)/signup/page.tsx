@@ -116,6 +116,7 @@ export default function SignupPage() {
   };
 
   const handleDemoAccess = (role: "student" | "teacher") => {
+    document.cookie = "riyaaz_demo_session=true; path=/; max-age=86400";
     setProfile({
       id: role === "student" ? "demo-student-id" : "demo-teacher-id",
       email: role === "student" ? "student@riyaaz.app" : "guru@riyaaz.app",
