@@ -5,6 +5,8 @@
     "apps/*"
   ],
   "scripts": {
+    "dev": "npm run dev --workspace=@riyaaz/web",
+    "web:dev": "npm run dev --workspace=@riyaaz/web",
     "web:build": "npm run build --workspace=@riyaaz/web",
     "web:lint": "npm run lint --workspace=@riyaaz/web",
     "web:test": "npm run test --workspace=@riyaaz/web"
